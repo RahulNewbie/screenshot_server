@@ -8,7 +8,9 @@ This application is made in python 3.8 ( compitable for python 3.7 and 3.6). I h
 
 Files made for tox:
 1. setup.py : (Re)Distributable package installation.
+
 2. requirements.txt : Setting up the development environment.
+
 3. tox.ini : Basic information about the project and the test environments. Should be in the same location as setup.py.
 
 ### Execution:
@@ -34,8 +36,11 @@ This application will open two types of API endpoint for the user
 http://localhost:5000/url/option
 
 Here url is the website url
+
 option can have two value
+
 view : This option will show the screenshot in browser
+
 address: This option will show the the address of the saved screenshot
 
 As an example
