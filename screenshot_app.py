@@ -46,6 +46,11 @@ def remove_brackets_from_url(url):
 
 
 def save_screenshot(full_path, response):
+    """
+    Saving the screenshot to a file
+    full_path: Address, where screenshot will be saved
+    response: content of the screenshot
+    """
     with open(full_path, 'wb') as f:
         f.write(response.content)
 
