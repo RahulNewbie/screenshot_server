@@ -93,7 +93,8 @@ def get_screenshot(url, option):
                                        screenshot_url=render_path)
             elif option == "address":
                 # Application will return the address of the screenshot
-                return "Screenshot is saved in --> " + str(full_path)
+                return "Screenshot is saved in --> " + str(full_path), \
+                       constant.SUCCESS_STATUS
             else:
                 return "Please use valid option. Either <view> or <address>"
         else:

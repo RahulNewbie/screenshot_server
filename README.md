@@ -58,6 +58,10 @@ http://localhost:5000/list
 
 This will show all the captured screenshot address along with the website url from database.
 
+### Unit test
 
+To run unit test cases, please go to the project folder and run the following command
+
+python unit_test.py
 
 
