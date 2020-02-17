@@ -59,8 +59,9 @@ def get_screenshot(url, option):
     the address of the screenshot, in case of successful execution.
     Else user will receive the appropriate error msg
     """
+    # Add https:// before the url
     url = constant.HTTP_ADAPTER + url
-    # remove brackets and parenthesis
+    # Remove brackets and parenthesis from the url, if any
     url = remove_brackets_from_url(url)
     # Check if the url is valid or not
     if not url_validator(url):
@@ -87,21 +88,28 @@ def get_screenshot(url, option):
             db_api.update_to_db(url, full_path)
             # If the User choose the option to view the screenshot in browser
             if option == "view":
+                app.logger.info("User has chosen to view the screenshot")
                 render_path = "/" + constant.STATIC_PATH_RENDER + tempfile + \
                               constant.SCREENSHOT_EXTENSION
                 return render_template('screenshot.html',
                                        screenshot_url=render_path)
             elif option == "address":
                 # Application will return the address of the screenshot
+                app.logger.info("Screenshot fetched and saved successfully. "
+                                "Address of the saved screenshot "
+                                "returned to user ")
                 return "Screenshot is saved in --> " + str(full_path), \
                        constant.SUCCESS_STATUS
             else:
                 return "Please use valid option. Either <view> or <address>"
         else:
+            app.logger.error("Error happened while getting screenshots")
             return "Error happened while getting screenshots", \
                    constant.FAILURE_STATUS
 
     except Exception as excep:
+        app.logger.error("Error while retrieve screenshot from "
+                         "the provided url" + str(excep))
         return "Could not retrieve the site" + str(excep)
 
 
