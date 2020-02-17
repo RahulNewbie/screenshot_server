@@ -45,6 +45,11 @@ def remove_brackets_from_url(url):
     return re.sub('[\[()\]]', '', url)
 
 
+def save_screenshot(full_path, response):
+    with open(full_path, 'wb') as f:
+        f.write(response.content)
+
+
 @app.route('/<url>/<option>')
 def get_screenshot(url, option):
     """
@@ -80,10 +85,10 @@ def get_screenshot(url, option):
 
         # Fetch the image
         response = fetch_image_from_thum_io(thum_io_url)
-        # Save the image in a file
+        # If fetching screenshot is successful
         if response.status_code == constant.SUCCESS_STATUS:
-            with open(full_path, 'wb') as f:
-                f.write(response.content)
+            # Save the image in a file
+            save_screenshot(full_path, response)
             # Insert record to database
             db_api.update_to_db(url, full_path)
             # If the User choose the option to view the screenshot in browser
