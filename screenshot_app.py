@@ -1,4 +1,3 @@
-from collections import defaultdict
 from flask import Flask, render_template
 import requests
 import json
@@ -9,6 +8,7 @@ import os
 import re
 import constant
 import db_api
+import db_schema_creator
 import validator
 
 
@@ -19,10 +19,30 @@ app.config['SCREENSHOT_FOLDER'] = constant.SCREENSHOT_FOLDER
 def url_validator(url):
     """
     Validate the website Url
+    @param: url --> website url
+    @return: True if url is valid, False otherwise
     """
     if not re.match(validator.regex, url):
         return False
     return True
+
+
+def fetch_image_from_thum_io(thum_io_url):
+    """
+    Use requests library to fetch screenshot using thum_io
+    @param: thum_io url with cerdential
+    @return: response
+    """
+    return requests.get(thum_io_url)
+
+
+def remove_brackets_from_url(url):
+    """
+    Remove brackets and perenthasis from url
+    @param : url
+    @return: url after removing brackets and perenthasis
+    """
+    return re.sub('[\[()\]]', '', url)
 
 
 @app.route('/<url>/<option>')
@@ -40,9 +60,9 @@ def get_screenshot(url, option):
     Else user will receive the appropriate error msg
     """
     url = constant.HTTP_ADAPTER + url
-    # strip brackets and parenthesis
-    url = re.sub('[\[()\]]', '', url)
-
+    # remove brackets and parenthesis
+    url = remove_brackets_from_url(url)
+    # Check if the url is valid or not
     if not url_validator(url):
         return "Url is not valid, Please use valid web url"
 
@@ -50,13 +70,15 @@ def get_screenshot(url, option):
     thum_io_url = constant.THUM_IO_GET_URL + constant.THUM_IO_AUTH + url
 
     try:
+        # Construct screenshot file name as the current date and time
         tempfile = str(datetime.datetime.now().date()) + '_' + \
                    str(datetime.datetime.now().time()).replace(':', '.')
+        # Full path to save the screenshot file in drive
         full_path = str(os.getcwd()) + "\\" + constant.STATIC_PATH_MEMORY + \
                    tempfile + constant.SCREENSHOT_EXTENSION
 
         # Fetch the image
-        response = requests.get(thum_io_url)
+        response = fetch_image_from_thum_io(thum_io_url)
         # Save the image in a file
         if response.status_code == constant.SUCCESS_STATUS:
             with open(full_path, 'wb') as f:
@@ -69,11 +91,14 @@ def get_screenshot(url, option):
                               constant.SCREENSHOT_EXTENSION
                 return render_template('screenshot.html',
                                        screenshot_url=render_path)
-            else:
+            elif option == "address":
                 # Application will return the address of the screenshot
                 return "Screenshot is saved in --> " + str(full_path)
+            else:
+                return "Please use valid option. Either <view> or <address>"
         else:
-            return "Error happened while getting screenshots", constant.FAILURE_STATUS
+            return "Error happened while getting screenshots", \
+                   constant.FAILURE_STATUS
 
     except Exception as excep:
         return "Could not retrieve the site" + str(excep)
@@ -98,5 +123,5 @@ if __name__ == '__main__':
                                   backupCount=1)
     handler.setLevel(logging.INFO)
     app.logger.addHandler(handler)
-    db_api.create_db_schema()
+    db_schema_creator.create_db_schema()
     app.run(debug=True)
