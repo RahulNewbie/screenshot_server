@@ -1,4 +1,4 @@
-# Instructionn to run screenshot_server application
+# Instruction to run screenshot_server application
 
 This application is made in python 3.8 ( compitable for python 3.7 and 3.6). I have used pep8 and pylint to check coding standards.
 
@@ -30,7 +30,8 @@ I installed this in my personal windows machine for python 3.7 and 3.8
 This application will open two types of API endpoint for the user
 
 1. To get screenshot of a website url
-http://localhost:5000/<url>/<option>
+
+http://localhost:5000/url/option
 
 Here url is the website url
 option can have two value
@@ -38,12 +39,16 @@ view : This option will show the screenshot in browser
 address: This option will show the the address of the saved screenshot
 
 As an example
+
 http://localhost:5000/goal.com/view
+
+
 http://localhost:5000/goal.com/address
 
 
 
 2. To get the list of all save screenshot in chronological order
+
 http://localhost:5000/list
 
 This will show all the captured screenshot address along with the website url from database.
