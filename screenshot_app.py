@@ -101,7 +101,7 @@ def get_screenshot(url, option):
                 return "Screenshot is saved in --> " + str(full_path), \
                        constant.SUCCESS_STATUS
             else:
-                return "Please use valid option. Either <view> or <address>"
+                return "Please use valid option. Either \"view\" or \"address\""
         else:
             app.logger.error("Error happened while getting screenshots")
             return "Error happened while getting screenshots", \
