@@ -31,7 +31,7 @@ I installed this in my personal windows machine for python 3.7 and 3.8
 
 This application will open two types of API endpoint for the user
 
-####1. To get screenshot of a website url, use the following command structure in browser
+1. To get screenshot of a website url, use the following command structure in browser
 
 http://localhost:5000/url/option
 
@@ -52,7 +52,7 @@ http://localhost:5000/goal.com/address
 
 Someone can use curl -X GET also for the same
 
-####2. To get the list of all save screenshot in chronological order
+2. To get the list of all save screenshot in chronological order
 
 http://localhost:5000/list
 
